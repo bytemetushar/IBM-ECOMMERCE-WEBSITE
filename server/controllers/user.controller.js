@@ -32,8 +32,6 @@ export const registerUser = async (req, res) => {
             return res.status(500).json({ success: false, message: 'User registration failed, please try again' });
         }
 
-        await user.save();
-
         user.password = undefined;
 
         const token = await user.generateJWTToken();
