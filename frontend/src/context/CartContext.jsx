@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { useAuth } from './AuthContext';
 
 const CartContext = createContext();
 
@@ -6,21 +7,74 @@ export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
+  const { user, setShowLoginPopup } = useAuth();
+  
+  // Flag to prevent immediate sync on mount
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load cart from local storage on mount
-  useEffect(() => {
-    const storedCart = localStorage.getItem('byteBazaar_cart');
-    if (storedCart) {
-      setCartItems(JSON.parse(storedCart));
+  const fetchCartFromServer = async () => {
+    try {
+      const res = await fetch('/api/cart');
+      const data = await res.json();
+      if (data.success && data.cart) {
+        // Map backend structure { product, quantity } to frontend structure
+        const mappedCart = data.cart.map(item => ({
+          ...item.product, // Spread product details (name, price, image)
+          quantity: item.quantity
+        }));
+        setCartItems(mappedCart);
+      }
+    } catch (error) {
+      console.error('Failed to fetch cart from server');
     }
-  }, []);
+  };
 
-  // Save cart to local storage on changes
+  const syncCartToServer = async (items) => {
+    if (!user) return;
+    try {
+      const formattedItems = items.map(item => ({
+        productId: item._id,
+        quantity: item.quantity
+      }));
+      
+      await fetch('/api/cart/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cartItems: formattedItems })
+      });
+    } catch (error) {
+      console.error('Failed to sync cart to server');
+    }
+  };
+
   useEffect(() => {
-    localStorage.setItem('byteBazaar_cart', JSON.stringify(cartItems));
-  }, [cartItems]);
+    if (user) {
+      fetchCartFromServer().then(() => setIsLoaded(true));
+    } else {
+      const storedCart = localStorage.getItem('byteBazaar_cart');
+      if (storedCart) {
+        setCartItems(JSON.parse(storedCart));
+      }
+      setIsLoaded(true);
+    }
+  }, [user]);
+
+  // Sync to backend OR local storage on changes
+  useEffect(() => {
+    if (!isLoaded) return;
+    
+    if (user) {
+      syncCartToServer(cartItems);
+    } else {
+      localStorage.setItem('byteBazaar_cart', JSON.stringify(cartItems));
+    }
+  }, [cartItems, user, isLoaded]);
 
   const addToCart = (product, quantity = 1) => {
+    if (!user) {
+      setShowLoginPopup(true);
+      return;
+    }
     setCartItems(prev => {
       const existingItem = prev.find(item => item._id === product._id);
       if (existingItem) {
@@ -46,11 +100,18 @@ export const CartProvider = ({ children }) => {
     ));
   };
 
-  const clearCart = () => {
+  const clearCart = async () => {
     setCartItems([]);
+    if (user) {
+      try {
+        await fetch('/api/cart/clear', { method: 'DELETE' });
+      } catch (err) {
+        console.error(err);
+      }
+    }
   };
 
-  const cartTotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  const cartTotal = cartItems.reduce((total, item) => total + (item.price || 0) * item.quantity, 0);
   const cartCount = cartItems.reduce((count, item) => count + item.quantity, 0);
 
   return (

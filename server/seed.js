@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import Product from './models/product.model.js';
 import Category from './models/category.model.js';
+import { fetchExternalProducts } from './utils/externalProductService.js';
 
 dotenv.config();
 
@@ -48,7 +49,7 @@ const seedDB = async () => {
         {
             name: 'Intel Core i9-14900K',
             description: '24-Core (8P+16E) Desktop Processor, 14th Gen.',
-            price: 589.99,
+            price: 52000,
             image: 'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=500&q=80',
             category: getCategoryId('Processors'),
             stock: 50
@@ -56,7 +57,7 @@ const seedDB = async () => {
         {
             name: 'AMD Ryzen 7 7800X3D',
             description: '8-Core, 16-Thread Desktop Processor with 3D V-Cache Technology.',
-            price: 399.00,
+            price: 35000,
             image: 'https://images.unsplash.com/photo-1555680202-c86f0e12f086?w=500&q=80',
             category: getCategoryId('Processors'),
             stock: 120
@@ -64,7 +65,7 @@ const seedDB = async () => {
         {
             name: 'NVIDIA GeForce RTX 4090',
             description: '24GB GDDR6X, Ada Lovelace Architecture, DLSS 3.',
-            price: 1599.99,
+            price: 165000,
             image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=500&q=80',
             category: getCategoryId('Graphics Cards'),
             stock: 15
@@ -72,7 +73,7 @@ const seedDB = async () => {
         {
             name: 'ASUS ROG Strix B650E-F Gaming WiFi',
             description: 'AM5 ATX motherboard, PCIe 5.0, DDR5, WiFi 6E.',
-            price: 269.99,
+            price: 26500,
             image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&q=80',
             category: getCategoryId('Motherboards'),
             stock: 45
@@ -147,7 +148,7 @@ const seedDB = async () => {
     };
 
     const getRandItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
-    const getPrice = (min, max) => Number((Math.random() * (max - min) + min).toFixed(2));
+    const getPrice = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 
     const extraProducts = [];
 
@@ -171,16 +172,41 @@ const seedDB = async () => {
     };
 
     // Generate specific realistic items
-    generateItems('Laptops', laptops, 15, 800, 2500);
-    generateItems('Desktops', desktops, 10, 1000, 3500);
-    generateItems('Smartphones', smartphones, 12, 500, 1400);
-    generateItems('Memory (RAM)', ram, 8, 60, 250);
-    generateItems('Storage', storage, 10, 50, 300);
+    generateItems('Laptops', laptops, 15, 45000, 220000);
+    generateItems('Desktops', desktops, 10, 60000, 300000);
+    generateItems('Smartphones', smartphones, 12, 15000, 150000);
+    generateItems('Memory (RAM)', ram, 8, 3000, 25000);
+    generateItems('Storage', storage, 10, 2500, 20000);
 
     const productsData = [...baseProducts, ...extraProducts];
 
-    console.log('Inserting products...');
+    console.log('Inserting local products...');
     await Product.insertMany(productsData);
+    
+    console.log('Fetching real products from External API (DummyJSON)...');
+    try {
+        const externalLaptops = await fetchExternalProducts('laptop');
+        const externalMobiles = await fetchExternalProducts('smartphone');
+        
+        const externalProducts = [...externalLaptops, ...externalMobiles];
+        
+        if (externalProducts.length > 0) {
+            const laptopsCatId = getCategoryId('Laptops');
+            const mobilesCatId = getCategoryId('Smartphones');
+            
+            const mappedExtProducts = externalProducts.map((p, index) => ({
+                ...p,
+                category: index < externalLaptops.length ? laptopsCatId : mobilesCatId
+            }));
+            
+            console.log(`Inserting ${mappedExtProducts.length} external products...`);
+            await Product.insertMany(mappedExtProducts);
+            console.log('Successfully synced real products from External API!');
+        }
+    } catch (error) {
+        console.error('Failed to sync from External API:', error.message);
+        console.log('Continuing with local seed data only.');
+    }
 
     console.log('Database seeded successfully with realistic tech products!');
     process.exit(0);

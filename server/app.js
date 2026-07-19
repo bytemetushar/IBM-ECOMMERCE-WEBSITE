@@ -10,6 +10,7 @@ dotenv.config();
 import userRoutes from './routes/user.routes.js';
 import productRoutes from './routes/product.routes.js';
 import orderRoutes from './routes/order.routes.js';
+import cartRoutes from './routes/cart.routes.js';
 
 const app = express();
 app.use(express.json());
@@ -30,6 +31,7 @@ app.use('/ping', function(req,res){
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/cart', cartRoutes);
 
 
 // app.all('*',(req,res)=>{

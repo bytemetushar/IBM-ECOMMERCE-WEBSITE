@@ -47,7 +47,14 @@ export const registerUser = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        let message = error.message;
+        if (error.code === 11000) {
+            const field = Object.keys(error.keyValue)[0];
+            message = `${field.charAt(0).toUpperCase() + field.slice(1)} already exists.`;
+        } else if (error.name === 'ValidationError') {
+            message = Object.values(error.errors).map(val => val.message).join(', ');
+        }
+        res.status(500).json({ success: false, message: message });
     }
 };
 

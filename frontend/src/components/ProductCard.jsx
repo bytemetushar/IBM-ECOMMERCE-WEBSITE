@@ -32,7 +32,7 @@ export default function ProductCard({ product }) {
       </Link>
       
       <div className="flex items-center justify-between mt-auto pt-4" style={{ borderTop: '1px solid var(--border-color)' }}>
-        <span className="text-cyan font-bold" style={{ fontSize: '1.25rem' }}>${product.price?.toFixed(2)}</span>
+        <span className="text-primary-accent font-bold" style={{ fontSize: '1.25rem' }}>₹{product.price?.toLocaleString('en-IN')}</span>
         <button 
           className="btn btn-primary flex items-center gap-2"
           onClick={(e) => {

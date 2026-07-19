@@ -23,10 +23,10 @@ export default function Home() {
 
   return (
     <div className="container py-16">
-      <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+      <div style={{ textAlign: 'center', marginBottom: '4rem', animation: 'fadeIn 0.8s ease-out forwards' }}>
         <h1 className="h1 text-gradient mb-4">Welcome to byteBazaar</h1>
-        <p className="text-secondary mb-8" style={{ fontSize: '1.25rem', maxWidth: '600px', margin: '0 auto' }}>
-          Discover the latest and greatest in tech. From high-performance processors and motherboards to cutting-edge peripherals.
+        <p className="text-secondary mb-8" style={{ fontSize: '1.25rem', maxWidth: '600px', margin: '0 auto', lineHeight: '1.8' }}>
+          Discover gear that empowers your creativity. Build the setup of your dreams with our curated collection of premium tech.
         </p>
         <Link to="/shop" className="btn btn-primary" style={{ textDecoration: 'none' }}>
           Start Shopping
@@ -45,6 +45,12 @@ export default function Home() {
           ))}
         </div>
       </div>
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}} />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { CartProvider } from './context/CartContext';
 // Layout & Components
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import LoginPromptModal from './components/LoginPromptModal';
 
 // Pages
 import Home from './pages/Home';
@@ -14,6 +15,7 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Orders from './pages/Orders';
 
 function App() {
   return (
@@ -28,11 +30,13 @@ function App() {
               <Route path="/product/:id" element={<ProductDetails />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
+              <Route path="/orders" element={<Orders />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
             </Routes>
           </main>
           <Footer />
+          <LoginPromptModal />
         </Router>
       </CartProvider>
     </AuthProvider>

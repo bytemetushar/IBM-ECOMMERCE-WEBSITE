@@ -63,17 +63,17 @@ export default function Shop() {
                 border: '1px solid',
                 borderColor: selectedCategory === category ? 'transparent' : 'var(--border-color)',
                 background: selectedCategory === category 
-                  ? 'linear-gradient(135deg, var(--accent-cyan), var(--accent-purple))'
-                  : 'var(--bg-tertiary)',
+                  ? 'var(--accent-primary)'
+                  : 'var(--bg-secondary)',
                 color: selectedCategory === category ? '#fff' : 'var(--text-secondary)',
                 cursor: 'pointer',
                 transition: 'all var(--transition-fast)',
-                boxShadow: selectedCategory === category ? '0 0 15px var(--accent-cyan-dim)' : 'none'
+                boxShadow: selectedCategory === category ? '0 4px 14px 0 rgba(99, 102, 241, 0.39)' : 'none'
               }}
               onMouseOver={e => {
                 if (selectedCategory !== category) {
                   e.currentTarget.style.color = 'var(--text-primary)';
-                  e.currentTarget.style.borderColor = 'var(--accent-cyan)';
+                  e.currentTarget.style.borderColor = 'var(--accent-primary)';
                 }
               }}
               onMouseOut={e => {
@@ -89,7 +89,7 @@ export default function Shop() {
         </div>
       )}
 
-      {loading && <div className="text-center text-cyan py-16" style={{ animation: 'pulse 1.5s infinite', fontSize: '1.25rem' }}>Loading products...</div>}
+      {loading && <div className="text-center text-primary-accent py-16" style={{ animation: 'pulse 1.5s infinite', fontSize: '1.25rem' }}>Loading products...</div>}
       {error && <p className="text-center py-16" style={{ color: '#f87171' }}>{error}</p>}
       
       {!loading && !error && (

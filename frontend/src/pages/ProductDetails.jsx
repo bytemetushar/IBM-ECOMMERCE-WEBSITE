@@ -33,7 +33,7 @@ export default function ProductDetails() {
   if (loading) {
     return (
       <div className="container py-16 flex items-center justify-center">
-        <div className="text-cyan h3" style={{ animation: 'pulse 1.5s infinite' }}>Loading Product...</div>
+        <div className="text-primary-accent h3" style={{ animation: 'pulse 1.5s infinite' }}>Loading Product...</div>
         <style dangerouslySetInnerHTML={{__html: `
           @keyframes pulse {
             0%, 100% { opacity: 1; }
@@ -58,7 +58,7 @@ export default function ProductDetails() {
 
   return (
     <div className="container py-8 fade-in">
-      <Link to="/shop" className="text-secondary hover-cyan mb-8" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontWeight: 500, transition: 'var(--transition-fast)' }}>
+      <Link to="/shop" className="text-secondary hover-primary-accent mb-8" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontWeight: 500, transition: 'var(--transition-fast)' }}>
         <ArrowLeft size={18} /> Back to Shop
       </Link>
       
@@ -104,7 +104,7 @@ export default function ProductDetails() {
             transform: 'translateX(-50%)',
             width: '80%',
             height: '20px',
-            background: 'var(--accent-cyan)',
+            background: 'var(--accent-primary)',
             filter: 'blur(30px)',
             opacity: 0.3,
             zIndex: -1
@@ -118,8 +118,8 @@ export default function ProductDetails() {
               display: 'inline-block',
               padding: '0.25rem 0.75rem',
               borderRadius: 'var(--radius-full)',
-              background: 'var(--accent-cyan-dim)',
-              color: 'var(--accent-cyan)',
+              background: 'var(--accent-primary-dim)',
+              color: 'var(--accent-primary)',
               fontSize: '0.875rem',
               fontWeight: 600,
               marginBottom: '1rem',
@@ -130,7 +130,7 @@ export default function ProductDetails() {
             </span>
             <h1 className="h1 text-gradient mb-2" style={{ fontSize: '2.5rem', lineHeight: 1.2 }}>{product.name}</h1>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '1rem' }}>
-              <span className="text-cyan font-bold" style={{ fontSize: '2rem' }}>${product.price?.toFixed(2)}</span>
+              <span className="text-primary-accent font-bold" style={{ fontSize: '2rem' }}>₹{product.price?.toLocaleString('en-IN')}</span>
               {product.stock > 0 ? (
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#4ade80', fontSize: '0.875rem', fontWeight: 500 }}>
                   <CheckCircle size={16} /> In Stock ({product.stock})
@@ -174,7 +174,7 @@ export default function ProductDetails() {
           </div>
           
           <div className="text-muted mt-4" style={{ fontSize: '0.875rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <p>✓ Free shipping on orders over $150</p>
+            <p>✓ Free shipping on orders over ₹1500</p>
             <p>✓ 30-day return policy</p>
             <p>✓ 24/7 priority customer support</p>
           </div>
@@ -183,7 +183,7 @@ export default function ProductDetails() {
       
       {/* Inline styles for hover classes used */}
       <style dangerouslySetInnerHTML={{__html: `
-        .hover-cyan:hover { color: var(--accent-cyan) !important; }
+        .hover-primary-accent:hover { color: var(--accent-primary) !important; }
         .fade-in { animation: fadeIn 0.5s ease-out forwards; }
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(10px); }

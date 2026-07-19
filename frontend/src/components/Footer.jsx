@@ -32,9 +32,9 @@ export default function Footer() {
         width: '100%',
         maxWidth: '800px',
         height: '1px',
-        background: 'linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-purple), transparent)',
+        background: 'linear-gradient(90deg, transparent, var(--accent-primary), var(--accent-secondary), transparent)',
         opacity: 0.5,
-        boxShadow: '0 0 20px var(--accent-cyan)'
+        boxShadow: '0 0 20px var(--accent-primary)'
       }}></div>
 
       <div className="container footer-grid">
