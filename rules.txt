@@ -1,0 +1,2 @@
+Never execute npm, npx, yarn, pnpm, bun, git, or long-running terminal commands.
+Always print the command and wait for me to execute it manually.
