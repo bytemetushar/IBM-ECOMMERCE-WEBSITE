@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
+import { API_BASE_URL } from '../config';
 
 export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -8,7 +9,7 @@ export default function Home() {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const response = await fetch('/api/products');
+        const response = await fetch(API_BASE_URL + '/api/products');
         const data = await response.json();
         if (data.success) {
           // Just take the first 3 for featured

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Navigate, Link } from 'react-router-dom';
 import { Package, ArrowRight } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 
 export default function Orders() {
   const { user } = useAuth();
@@ -13,7 +14,7 @@ export default function Orders() {
     if (!user) return;
     const fetchOrders = async () => {
       try {
-        const res = await fetch('/api/orders/myorders');
+        const res = await fetch(API_BASE_URL + '/api/orders/myorders');
         const data = await res.json();
         if (data.success) {
           setOrders(data.orders);

@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { API_BASE_URL } from '../config';
 
 const AuthContext = createContext();
 
@@ -12,7 +13,7 @@ export const AuthProvider = ({ children }) => {
 
   const fetchProfile = async () => {
     try {
-      const response = await fetch('/api/users/me');
+      const response = await fetch(API_BASE_URL + '/api/users/me');
       const data = await response.json();
       if (data.success) {
         setUser(data.user);
@@ -41,7 +42,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setError(null);
     try {
-      const res = await fetch('/api/users/login', {
+      const res = await fetch(API_BASE_URL + '/api/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -65,7 +66,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (FullName, email, password, contact) => {
     setError(null);
     try {
-      const res = await fetch('/api/users/register', {
+      const res = await fetch(API_BASE_URL + '/api/users/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ FullName, email, password, contact })
@@ -88,7 +89,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await fetch('/api/users/logout', { method: 'POST' });
+      await fetch(API_BASE_URL + '/api/users/logout', { method: 'POST' });
     } catch (err) {
       console.error(err);
     }

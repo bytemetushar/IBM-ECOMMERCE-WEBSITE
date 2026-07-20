@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { ShoppingCart, ArrowLeft, CheckCircle, XCircle } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -13,7 +14,7 @@ export default function ProductDetails() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`/api/products/${id}`);
+        const response = await fetch(API_BASE_URL + `/api/products/${id}`);
         const data = await response.json();
         if (data.success) {
           setProduct(data.product);
