@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
-import { API_BASE_URL } from '../config';
+import { api } from '../config';
 
 const CartContext = createContext();
 
@@ -15,7 +15,7 @@ export const CartProvider = ({ children }) => {
 
   const fetchCartFromServer = async () => {
     try {
-      const res = await fetch(API_BASE_URL + '/api/cart');
+      const res = await api('/api/cart');
       const data = await res.json();
       if (data.success && data.cart) {
         // Map backend structure { product, quantity } to frontend structure
@@ -38,7 +38,7 @@ export const CartProvider = ({ children }) => {
         quantity: item.quantity
       }));
       
-      await fetch(API_BASE_URL + '/api/cart/sync', {
+      await api('/api/cart/sync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ cartItems: formattedItems })
@@ -105,7 +105,7 @@ export const CartProvider = ({ children }) => {
     setCartItems([]);
     if (user) {
       try {
-        await fetch(API_BASE_URL + '/api/cart/clear', { method: 'DELETE' });
+        await api('/api/cart/clear', { method: 'DELETE' });
       } catch (err) {
         console.error(err);
       }

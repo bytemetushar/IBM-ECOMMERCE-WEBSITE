@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import ProductCard from '../components/ProductCard';
-import { API_BASE_URL } from '../config';
+import { api } from '../config';
 
 export default function Shop() {
   const [products, setProducts] = useState([]);
@@ -11,7 +11,7 @@ export default function Shop() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(API_BASE_URL + '/api/products');
+        const response = await api('/api/products');
         const data = await response.json();
         if (data.success) {
           setProducts(data.products);

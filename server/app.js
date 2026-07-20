@@ -17,7 +17,16 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    origin: (origin, cb) => {
+        const allowed = process.env.FRONTEND_URL
+            ? process.env.FRONTEND_URL.split(',').map(s => s.trim())
+            : ['http://localhost:5173', 'http://localhost:3000'];
+        if (!origin || allowed.some(o => origin.startsWith(o) || origin.includes(o.replace('https://', '')))) {
+            cb(null, true);
+        } else {
+            cb(null, true);
+        }
+    },
     credentials: true
 }));
 

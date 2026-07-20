@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Navigate } from 'react-router-dom';
-import { API_BASE_URL } from '../config';
+import { api } from '../config';
 
 export default function Checkout() {
   const { cartItems, cartTotal, clearCart } = useCart();
@@ -39,7 +39,7 @@ export default function Checkout() {
         totalPrice: cartTotal
       };
 
-      const response = await fetch(API_BASE_URL + '/api/orders', {
+      const response = await api('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData)
